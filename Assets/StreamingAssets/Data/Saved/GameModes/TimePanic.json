@@ -1,0 +1,23 @@
+{
+  "name": "TimePanic",
+  "objective": 1,
+  "objectiveLimitSettings": 1,
+  "birdNumberLimit": 10,
+  "timeLimit": 60,
+  "soundPresenceSetting": 0,
+  "imagePresenceSetting": 2,
+  "soundSetting": 0,
+  "imageSetting": 0,
+  "answerSetting": 1,
+  "lang": 2,
+  "hintLang": 0,
+  "isFavorite": true,
+  "traductionMode": false,
+  "allowHabitatHint": false,
+  "allowFoodHint": false,
+  "habitat": "",
+  "rarityLimit": 50,
+  "family": "",
+  "order": "",
+  "food": ""
+}

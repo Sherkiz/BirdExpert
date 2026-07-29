@@ -1,0 +1,23 @@
+{
+  "name": "Images",
+  "objective": 0,
+  "objectiveLimitSettings": 1,
+  "birdNumberLimit": 10,
+  "timeLimit": 0,
+  "soundPresenceSetting": 0,
+  "imagePresenceSetting": 2,
+  "soundSetting": 2,
+  "imageSetting": 0,
+  "answerSetting": 1,
+  "lang": 2,
+  "hintLang": 0,
+  "isFavorite": true,
+  "traductionMode": false,
+  "allowHabitatHint": false,
+  "allowFoodHint": false,
+  "habitat": "",
+  "rarityLimit": 50,
+  "family": "",
+  "order": "",
+  "food": ""
+}

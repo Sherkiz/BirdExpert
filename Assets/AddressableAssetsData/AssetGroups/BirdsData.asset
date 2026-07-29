@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: BirdsData
+  m_EditorClassIdentifier: 
+  m_GroupName: BirdsData
+  m_GUID: f74c1ea1bb75b524f87b889a2eac2aee
+  m_SerializeEntries:
+  - m_GUID: 1dc2df454617a9f48aa94cdd0eac817c
+    m_Address: Top50
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BaseData
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fc4b4e320be20dc46b7395a0fb891c2a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 488d1f65bd817cb4ba0757ce8e485eda, type: 2}
+    - {fileID: 11400000, guid: b9be07054c94a8045a28e49bbb40f99b, type: 2}

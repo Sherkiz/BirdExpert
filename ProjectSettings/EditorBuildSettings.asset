@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/LevelTestScene.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/LoadingScene.unity
+    guid: 67b45b88059eca64e981cfd66cc00038
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: f298c3693f621aa4e8129e1ce8b5fcaa
+  - enabled: 1
+    path: Assets/Scenes/Game.unity
+    guid: 66edd528bed177342a8b3c1ff494beb7
+  - enabled: 1
+    path: Assets/Scenes/Birdrairy.unity
+    guid: 9465710bd62354f46a5a0ef7f07c714a
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 4e1e6835de2d68940a164673d764fa6e, type: 2}
+  m_UseUCBPForAssetBundles: 0
