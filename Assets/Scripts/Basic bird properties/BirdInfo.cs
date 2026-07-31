@@ -93,7 +93,8 @@ namespace BirdExpert
             BirdImage[] selectedImages;
             if (sex == Sex.All) { selectedImages = AllImages; }
             else { selectedImages = AllImages.Where(image => image.sex == sex).ToArray(); }
-            selectedImages = AllImages.Where(image => image.imageType == imageType).ToArray();
+            selectedImages.Select(image => image.imageType == imageType).ToArray();
+            Debug.Log(GetName(Lang.French) + " has " + selectedImages.Count().ToString() + " image(s) for sex " + sex);
             if (selectedImages.Length == 0) { return new(null, Sex.None); }
             if (selectedImages.Length == 1) return selectedImages[0];
             else { return selectedImages[UnityEngine.Random.Range(0, selectedImages.Length)]; }

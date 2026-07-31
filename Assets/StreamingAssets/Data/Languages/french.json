@@ -124,5 +124,6 @@
   "gamemodes-title": "Mes modes de jeux",
   "did-not-have-time": "Vous n'avez pas eu le temps de proposer une réponse...",
   "enter-bird-name": "Entrer le nom d'un oiseau...",
-  "Quit": "Quitter"
+  "Quit": "Quitter",
+  "inverse-sex":  "Inverser le sexe"
 }
