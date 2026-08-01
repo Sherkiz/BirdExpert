@@ -37,15 +37,16 @@ namespace BirdExpert
                 correctionIconWrong.SetActive(!answer.isCorrect);
                 if (answer.isCorrect) correctionText.SetCodeText("good-answer");
                 else correctionText.SetText(Language.GetLang("wrong-answer-beginning") + answer.givenAnswer.GetName(gameMode.lang));
+                detailsButton.SetCodeText("correction-details-button");
+                detailsButton.onClick.AddListener(OpenResultsDetails);
             }
             else
             {
                 correctionIconRight.SetActive(false);
                 correctionIconWrong.SetActive(false);
+                detailsButton.gameObject.SetActive(false);
                 correctionText.SetText(Language.GetLang("did-not-have-time"));
             }
-            detailsButton.SetCodeText("correction-details-button");
-            detailsButton.onClick.AddListener(OpenResultsDetails);
         }
         private void OpenResultsDetails() => endArea.OpenResultDetails(answer);
     }
