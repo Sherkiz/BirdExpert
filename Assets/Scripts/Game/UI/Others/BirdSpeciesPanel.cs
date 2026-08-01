@@ -15,7 +15,7 @@ namespace BirdExpert
 
         public void Initialize(BirdInfo bird)
         {
-            birdImage.sprite = bird.GetRandomImage(GameSettings.ImageSettings.Base, Sex.Male).image;
+            birdImage.sprite = bird.GetRandomImage(GameSettings.ImageSettings.Base, Sex.All).image;
             birdNameText.SetText(bird.GetName(Lang.Latin));
             AudioClip alarmClip = bird.GetRandomSound(SoundType.Alarm, false).sound;
             if (alarmClip != null) alarmSoundButton.onClick.AddListener(() => birdSpeciesDisplayer.PlayAudioClip(alarmClip));
