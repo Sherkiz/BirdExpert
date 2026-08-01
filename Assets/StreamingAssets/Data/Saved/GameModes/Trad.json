@@ -11,7 +11,7 @@
   "answerSetting": 1,
   "lang": 2,
   "hintLang": 1,
-  "isFavorite": true,
+  "isFavorite": false,
   "traductionMode": true,
   "allowHabitatHint": false,
   "allowFoodHint": false,
