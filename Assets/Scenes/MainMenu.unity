@@ -23462,6 +23462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameModeButtonTemplate: {fileID: 5427186}
+  toggleButton: {fileID: 1874931855}
 --- !u!114 &1234247323
 MonoBehaviour:
   m_ObjectHideFlags: 0
