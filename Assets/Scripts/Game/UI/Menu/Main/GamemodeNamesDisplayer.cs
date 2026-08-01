@@ -16,6 +16,7 @@ namespace BirdExpert
             scrollRect = GetComponent<ScrollRect>();
             buttons = new();
             SetButtons();
+            CheckInteractable();
         }
 
         private void SetButtons()
@@ -42,6 +43,10 @@ namespace BirdExpert
             }
             Destroy(button.gameObject);
             buttons.Remove(gameMode);
+            CheckInteractable();
+        }
+        private void CheckInteractable() 
+        {
             if (buttons.Count == 0)
             {
                 CloseArea();
