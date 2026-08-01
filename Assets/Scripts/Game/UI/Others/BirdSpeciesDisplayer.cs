@@ -10,6 +10,7 @@ namespace BirdExpert
         [SerializeField] private BirdSpeciesPanel panelTemplate;
         private ScrollRect scrollRect;
         private AudioSource audioSource;
+        private AudioClip currentClip;
         public void Initialize()
         {
             scrollRect = GetComponent<ScrollRect>();
@@ -30,8 +31,16 @@ namespace BirdExpert
 
         public void PlayAudioClip(AudioClip clip)
         {
-            if (audioSource.isPlaying) audioSource.Stop();
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+                if (clip == currentClip)   // user clicked on the same button, so no need to play the sound again
+                {
+                    return;
+                }
+            }
             audioSource.PlayOneShot(clip);
+            currentClip = clip;
         }
     }
 }
