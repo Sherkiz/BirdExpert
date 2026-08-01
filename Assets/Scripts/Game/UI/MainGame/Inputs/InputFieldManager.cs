@@ -38,6 +38,7 @@ namespace BirdExpert
             this.quizzArea = quizzArea;
             Interactable = true;
             birdNames = BirdsManager.GetAllNamesInLang(quizzArea.gameMode.lang);
+            ResetInputField();
             InitializeValidationButton();
         }
 
@@ -126,11 +127,10 @@ namespace BirdExpert
 
         private void InitializeValidationButton()
         {
-            validationButton.GetComponent<Button>().onClick.AddListener(ValidateAnswer);
             validationButton.SetActive(false);
         }
 
-        private void ValidateAnswer()
+        public void ValidateAnswer()
         {
             quizzArea.ProcessAnswer(inputField.text);
             inputField.text = "";
