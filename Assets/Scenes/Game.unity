@@ -2905,7 +2905,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   birdDisplayer: {fileID: 1959822987}
-  soundPlayerParent: {fileID: 1824238446}
+  soundPlayer: {fileID: 1654516370}
   inputFieldManager: {fileID: 1911558731}
   resultArea: {fileID: 1261848405}
   limitText: {fileID: 742624570}
@@ -11385,7 +11385,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1915738244}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1911558731}
+        m_TargetAssemblyTypeName: BirdExpert.InputFieldManager, Assembly-CSharp
+        m_MethodName: ValidateAnswer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1915738244
 MonoBehaviour:
   m_ObjectHideFlags: 0
