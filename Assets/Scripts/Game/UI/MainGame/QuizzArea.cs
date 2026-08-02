@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 namespace BirdExpert { 
     public class QuizzArea : UIAreaMainGame
@@ -15,6 +17,7 @@ namespace BirdExpert {
         [SerializeField] private TextMeshProUGUI otherLangNameText;
         [SerializeField] private QuizzHint habitatHint;
         [SerializeField] private QuizzHint foodHint;
+        [SerializeField] private PausePanel pausePanel;
         private BirdInfo currentBird;
         private BirdImage currentImage;
         private BirdSound currentSound;
@@ -26,18 +29,27 @@ namespace BirdExpert {
         private bool isQuizRunning;
         private List<QuizzAnswer> allAnswers;
         private List<BirdInfo> previousBirds => allAnswers.Select(ans => ans.expectedBird).ToList();
+        private Action UpdateActions;
 
         public override void Initialize(bool active)
         {
             base.Initialize(active);
             birdsManager.InitGoodBirds();
             ResetQuiz();
+            UpdateActions = null;
             if (gameMode.answerSetting == GameSettings.AnswerSettings.Direct)
             {
                 resultArea.onBackButtonPressed += GoToNextBird;
+                resultArea.onBackButtonPressed += OpenArea;
                 resultArea.SetMode(inQuizz: true);
             }
+            UpdateActions += HandleInputs;
+            if (gameMode.objective == GameSettings.GameObjective.TimedQuizz)
+            {
+                UpdateActions += HandleTime;
+            }
             resultArea.Initialize(false);
+            pausePanel.Initialize(false);
             soundPlayer.transform.parent.gameObject.SetActive(gameMode.soundPresenceSetting != GameSettings.DataPresenceSettings.Never);
             birdDisplayer.gameObject.SetActive(gameMode.imagePresenceSetting != GameSettings.DataPresenceSettings.Never);
             habitatHint.Initialize(gameMode.allowHabitatHint);
@@ -52,7 +64,11 @@ namespace BirdExpert {
         private void Update()
         {
             if (!isQuizRunning) { return; }
-            if (canvasManager.timeForQuizz != 0 && gameMode.objective == GameSettings.GameObjective.TimedQuizz)
+            UpdateActions?.Invoke();
+        }
+        private void HandleTime()
+        {
+            if (canvasManager.timeForQuizz != 0)
             {
                 timeCounter += Time.deltaTime;
                 if (timeCounter > canvasManager.timeForQuizz)
@@ -61,6 +77,26 @@ namespace BirdExpert {
                 }
                 UpdateTimeText();
             }
+        }
+        private void HandleInputs()
+        {
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                PauseQuiz();
+            }
+        }
+        private void PauseQuiz()
+        {
+            pausePanel.OpenArea();
+            isQuizRunning = false;
+            soundPlayer.Pause();
+            birdDisplayer.gameObject.SetActive(false);
+        }
+        public void ResumeQuiz()
+        {
+            isQuizRunning = true;
+            soundPlayer.UnPause();
+            birdDisplayer.gameObject.SetActive(gameMode.imagePresenceSetting != GameSettings.DataPresenceSettings.Never);
         }
         private void UpdateTimeText()
         {
@@ -159,7 +195,12 @@ namespace BirdExpert {
             if (gameMode.answerSetting == GameSettings.AnswerSettings.Direct)
             {
                 resultArea.SetResults(quizzAnswer);
-                if (birdCount == canvasManager.numberOfBirdsInQuizz) resultArea.StopQuizz();
+                CloseArea();
+                if (birdCount == canvasManager.numberOfBirdsInQuizz)
+                {
+                    resultArea.StopQuizz();
+                    resultArea.onBackButtonPressed -= OpenArea;
+                }
             }
             else GoToNextBird();
         }

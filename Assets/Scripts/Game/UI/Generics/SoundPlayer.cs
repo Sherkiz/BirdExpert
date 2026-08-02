@@ -29,4 +29,6 @@ public class SoundPlayer : MonoBehaviour
     public void PlayOneShot(AudioClip clip) => audioSource.PlayOneShot(clip);
     public void ResetAudioClip() => audioSource.clip = null;
     public void SetCodeText(string codeText) => button.SetCodeText(codeText);
+    public void Pause() => audioSource.Pause();
+    public void UnPause() => audioSource.UnPause();
 }
