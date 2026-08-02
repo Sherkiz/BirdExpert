@@ -16,6 +16,7 @@ namespace BirdExpert
         public GameMode currentModifiedGameMode { get; set; }
         private OptionsField[] optionsFields;
         private ScrollRect scrollRect;
+        private bool doubleOverride;
         private UIOpenablePanel activePanel 
         { 
             get 
@@ -25,12 +26,12 @@ namespace BirdExpert
         }
         public override void Initialize(bool active)
         {
-            base.Initialize(active);
             currentModifiedGameMode = new GameMode();
             optionsFields = GetComponentsInChildren<OptionsField>(includeInactive:true);
             scrollRect = GetComponent<ScrollRect>();
             scrollRect.content = activePanel.AreaRect;
             InitializeArea();
+            base.Initialize(active);
         }
         public override void OpenArea()
         {
@@ -67,13 +68,14 @@ namespace BirdExpert
             gameMode = currentModifiedGameMode;
             menuManager.PlayGame(gameMode);
         }
-        public void SaveGameModeConfirmation()
+        public void SaveGameModeConfirmation(bool shouldQuitAfterSave = false)
         {
             if (GameModesLoader.gameModesByName.ContainsKey(currentModifiedGameMode.name))
             {
                 if (GameModesLoader.gameModesByName[currentModifiedGameMode.name].Equals(currentModifiedGameMode)) return;
                 confirmationBox.Open("gamemode-name-exists");
                 confirmationBox.AddConfirmationAction(SaveGameMode);
+                if (shouldQuitAfterSave) confirmationBox.AddConfirmationAction(CloseGameModesCreation);
             }
             else if (GameModesLoader.gameModesByName.Values.Any(gm => gm.Equals(currentModifiedGameMode)))
             {
@@ -81,10 +83,12 @@ namespace BirdExpert
                 confirmationBox.Open("gamemode-content-exists");
                 Debug.Log("Should rename " +  gameMode.name + " into " + currentModifiedGameMode.name);
                 confirmationBox.AddConfirmationAction(() => RenameGameMode(gameMode, currentModifiedGameMode));
+                if (shouldQuitAfterSave) confirmationBox.AddConfirmationAction(CloseGameModesCreation);
             }
             else
             {
                 SaveNewGameMode();
+                if (shouldQuitAfterSave) CloseGameModesCreation();
             }
         }
         private void SaveGameMode()
@@ -106,13 +110,18 @@ namespace BirdExpert
         }
         public void CloseGameModesCreationConfirmation()
         {
-            if (currentModifiedGameMode == new GameMode() && currentModifiedGameMode.name == "New Game Mode")
+            if ((currentModifiedGameMode == new GameMode() && currentModifiedGameMode.name == "New Game Mode"))
             {
                 CloseGameModesCreation();
                 return;
             }
             if (!AllSettingsValid())
             {
+                if (doubleOverride)
+                {
+                    CloseGameModesCreation();
+                    return;
+                }
                 confirmationBox.Open("gamemode-notvalid");
                 confirmationBox.AddCancelAction(CloseGameModesCreation);
                 confirmationBox.AddConfirmationAction(confirmationBox.Close);
@@ -124,7 +133,7 @@ namespace BirdExpert
                 if (!savedGameMode.Equals(currentModifiedGameMode))
                 {
                     confirmationBox.Open("gamemode-notsaved");
-                    confirmationBox.AddConfirmationAction(SaveGameModeConfirmation);
+                    confirmationBox.AddConfirmationAction(() => SaveGameModeConfirmation(true));
                     confirmationBox.AddCancelAction(CloseGameModesCreation);
                     return;
                 }
@@ -132,7 +141,7 @@ namespace BirdExpert
             else
             {
                 confirmationBox.Open("gamemode-notsaved");
-                confirmationBox.AddConfirmationAction(SaveGameModeConfirmation);
+                confirmationBox.AddConfirmationAction(() => SaveGameModeConfirmation(true));
                 confirmationBox.AddCancelAction(CloseGameModesCreation);
                 return;
             }
@@ -140,6 +149,7 @@ namespace BirdExpert
         }
         private void CloseGameModesCreation()
         {
+            Debug.Log("Closing...");
             menuManager.CloseGameModesCreation();
         }
         public void SetInfoText(string text) => infoText.OpenAtMousePosition(text);
@@ -152,11 +162,16 @@ namespace BirdExpert
         }
         private bool AllSettingsValid()
         {
+            doubleOverride = false;
             foreach (var option in optionsFields)
             {
                 if (!option.CheckValid()) return false;
             }
-            return true;
+            bool nameUsed = GameModesLoader.gameModesByName.ContainsKey(currentModifiedGameMode.name);
+            bool existingMode = GameModesLoader.gameModesByName.Values.Any(gm => gm.Equals(currentModifiedGameMode));
+            doubleOverride = nameUsed && existingMode; 
+            
+            return !doubleOverride;
         }
         public void LoadGameMode(GameMode gameMode)
         {

@@ -6,22 +6,24 @@ namespace BirdExpert
     {
         [SerializeField] private OptionsFieldManager optionsFieldManager;
         [SerializeField] private GameModeLoadingPanel loadingPanel;
+        [SerializeField] private ConfirmationBox confirmationBox;
         public override void Initialize(bool active)
         {
             base.Initialize(active);
-            optionsFieldManager.Initialize(true, menuManager);
+            optionsFieldManager.Initialize(active, menuManager);
             loadingPanel.OptionsArea = this;
-            loadingPanel.Initialize(true, menuManager);
+            loadingPanel.Initialize(active, menuManager);
+            confirmationBox.Close();
         }
         public override void OpenArea()
         {
             base.OpenArea();
-            optionsFieldManager.ActualizeArea();
+            optionsFieldManager.OpenArea();
             loadingPanel.CloseArea();
         }
         public void LoadGameMode(GameMode gameMode) => optionsFieldManager.LoadGameMode(gameMode);
         public void AddGameMode(GameMode gameMode) => loadingPanel.AddButton(gameMode);
-        public void RemoveGameMode(GameMode gameMode) => loadingPanel.DeleteGameMode(gameMode);
+        public void RemoveGameMode(GameMode gameMode) => loadingPanel.RemoveGameMode(gameMode);
         public void ResetArea() => optionsFieldManager.ResetArea();
     }
 }

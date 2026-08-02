@@ -12,7 +12,11 @@ namespace BirdExpert
         public virtual bool IsOpen { get => gameObject.activeSelf; }
         public virtual void OpenArea() => gameObject.SetActive(true);
         public virtual void CloseArea() => gameObject.SetActive(false);
-        public virtual void ToggleArea(bool active) => gameObject.SetActive(active);
+        public virtual void ToggleArea(bool active)
+        {
+            if (active) OpenArea();
+            else CloseArea();
+        }
         public virtual void ToggleArea()
         {
             if (IsOpen) CloseArea();

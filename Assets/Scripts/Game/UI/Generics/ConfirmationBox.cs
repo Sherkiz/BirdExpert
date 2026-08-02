@@ -25,6 +25,8 @@ namespace BirdExpert
         {
             gameObject.SetActive(false);
             confirmButton.onClick.RemoveAllListeners();
+            cancelButton.onClick.RemoveAllListeners();
+            cancelButton.onClick.AddListener(Close);
         }
         public void Open(string code)
         {
@@ -42,7 +44,6 @@ namespace BirdExpert
         private void Awake()
         {
             cancelButton.onClick.AddListener(Close);
-            Close();
         }
         private void Update()
         {
