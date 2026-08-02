@@ -21,7 +21,11 @@ namespace BirdExpert
             gameModesByName = new();
             GameManager.Instance.StartCoroutine(LoadAllGameModes());
         }
-        private string GetPathFromGameModeName(string name) => Path.Join(savedGameModesPath, name + ".json");
+        private string GetPathFromGameModeName(string name)
+        {
+            string correctedName = name.Replace(' ', '_');
+            return Path.Join(savedGameModesPath, correctedName + ".json");
+        }
         private string GetPathFromGameMode(GameMode gameMode) => GetPathFromGameModeName(gameMode.name);
         public void SaveGameMode(GameMode gameMode)
         {
@@ -41,27 +45,29 @@ namespace BirdExpert
         }
         public void RenameGameMode(GameMode oldGameMode, GameMode newGameMode)
         {
-            if (!File.Exists(GetPathFromGameModeName(oldGameMode.name))) 
-            {
-                Debug.LogWarning("Trying to rename game mode " + oldGameMode.name + " but file was not found.");
-                return; 
-            }
-            File.Delete(GetPathFromGameModeName(oldGameMode.name));
-#if UNITY_EDITOR
-            File.Delete(GetPathFromGameModeName(oldGameMode.name) + ".meta");
-#endif 
-            gameModesByName.Remove(oldGameMode.name);
+            TryRemoveGameMode(oldGameMode);
             SaveGameMode(newGameMode);
         }
         public bool TryRemoveGameMode(GameMode gameMode)
         {
-            if (!File.Exists(GetPathFromGameMode(gameMode))) { return false; }
+            if (!File.Exists(GetPathFromGameMode(gameMode)))
+            {
+                Debug.LogWarning("Trying to delete game mode " + gameMode.name + " but file was not found.");
+                return false; 
+            }
             else
             {
-                File.Delete(GetPathFromGameMode(gameMode));
+                DeleteGameModeFile(gameMode.name);
                 gameModesByName.Remove(gameMode.name);
                 return true;
             }
+        }
+        private void DeleteGameModeFile(string gameModeName)
+        {
+            File.Delete(GetPathFromGameModeName(gameModeName));
+#if UNITY_EDITOR
+            File.Delete(GetPathFromGameModeName(gameModeName) + ".meta");
+#endif 
         }
         private GameMode LoadGameModeFromFile(string filename)
         {

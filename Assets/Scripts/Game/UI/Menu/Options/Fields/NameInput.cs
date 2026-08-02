@@ -21,6 +21,7 @@ namespace BirdExpert
         }
         protected override char ValidateInput(string input, char addedCharacter)
         {
+            if (addedCharacter == ' ') return ' ';
             if ((addedCharacter < 'a' || addedCharacter > 'z') && (addedCharacter < 'A' || addedCharacter > 'Z') && (addedCharacter < '0' || addedCharacter > '9'))
             {
                 return '\0';
