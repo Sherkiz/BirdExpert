@@ -7,23 +7,20 @@ namespace BirdExpert
     public class GameModeLoadingButton : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI nameText;
-        [SerializeField] private Button loadButton;
-        [SerializeField] private Button deleteButton;
         private GameModeLoadingPanel panel;
         public GameModeLoadingPanel Panel { set =>  panel = value; }
-        private GameMode gameMode;
-        public void Initialize(GameMode gameMode)
+        private string gameModeName;
+        private GameMode gameMode { get => GameModesLoader.gameModesByName[gameModeName]; }
+        public void Initialize(string gameModeName)
         {
-            this.gameMode = gameMode;
-            loadButton.onClick.AddListener(LoadGameMode);
-            deleteButton.onClick.AddListener(DeleteGameMode);
-            nameText.SetText(gameMode.name);
+            this.gameModeName = gameModeName;
+            nameText.SetText(gameModeName);
         }
-        private void LoadGameMode()
+        public void LoadGameMode()
         {
             if (panel != null) panel.LoadGameMode(gameMode);
         }
-        private void DeleteGameMode()
+        public void DeleteGameMode()
         {
             if (panel != null) panel.OnDeleteGameModeClicked(gameMode);
         }

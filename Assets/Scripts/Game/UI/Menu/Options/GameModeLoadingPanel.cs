@@ -7,7 +7,8 @@ namespace BirdExpert {
     public class GameModeLoadingPanel : UIAreaMenu
     {
         [SerializeField] GameModeLoadingButton buttonTemplate;
-        private ScrollRect scrollRect;
+        [SerializeField] private ScrollRect scrollRect;
+        [SerializeField] private ConfirmationBox confirmationBox;
         private Dictionary<GameMode, GameModeLoadingButton> buttons;
         private OptionsArea optionsArea;
         public OptionsArea OptionsArea { set =>  optionsArea = value; }
@@ -15,7 +16,6 @@ namespace BirdExpert {
         {
             base.Initialize(active);
             buttons = new();
-            scrollRect = GetComponentInChildren<ScrollRect>(includeInactive: true);
             scrollRect.gameObject.SetActive(false);
             SetButtons();
         }
@@ -31,11 +31,11 @@ namespace BirdExpert {
             GameModeLoadingButton gameModeButton = Instantiate(buttonTemplate, scrollRect.content);
             gameModeButton.gameObject.SetActive(true);
             gameModeButton.Panel = this;
-            gameModeButton.Initialize(gameMode);
+            gameModeButton.Initialize(gameMode.name);
             buttons[gameMode] = gameModeButton;
         }
         public void LoadGameMode(GameMode gameMode) => optionsArea.LoadGameMode(gameMode);
-        public void DeleteGameMode(GameMode gameMode)
+        public void RemoveGameMode(GameMode gameMode)
         {
             if (!buttons.TryGetValue(gameMode, out GameModeLoadingButton button))
             {
@@ -46,6 +46,11 @@ namespace BirdExpert {
             buttons.Remove(gameMode);
         }
         public void OnDeleteGameModeClicked(GameMode gameMode) 
+        {
+            confirmationBox.AddConfirmationAction(() => AskGameModeDeletion(gameMode));
+            confirmationBox.Open("delete-gamemoded-confirmation");
+        }
+        public void AskGameModeDeletion(GameMode gameMode)
         {
             menuManager.RemoveGameMode(gameMode, true);
             GameManager.Instance.gameModesLoader.TryRemoveGameMode(gameMode);
