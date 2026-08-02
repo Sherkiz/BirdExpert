@@ -125,5 +125,8 @@
   "did-not-have-time": "Vous n'avez pas eu le temps de proposer une réponse...",
   "enter-bird-name": "Entrer le nom d'un oiseau...",
   "Quit": "Quitter",
-  "inverse-sex":  "Inverser le sexe"
+  "inverse-sex": "Inverser le sexe",
+  "resume-quiz": "Reprendre",
+  "pause-menu": "Le jeu est en pause",
+  "delete-gamemoded-confirmation":  "Etes-vous sûr de vouloir supprimer ce mode de jeu ?"
 }
