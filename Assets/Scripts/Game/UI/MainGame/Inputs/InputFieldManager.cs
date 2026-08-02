@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -97,6 +98,7 @@ namespace BirdExpert
                         selectedTextBoxIndex = 0;
                     }
                     resultIndex++;
+                    Debug.Log(birdName);
                 }
             }
             else
@@ -109,10 +111,26 @@ namespace BirdExpert
         private List<string> GetResults(string input)
         {
             OnAnswerFilled(input);
-            if (!(input == null || input == "" || input == " ")) return birdNames.FindAll((str) => str.ToLower().Contains(input.ToLower()));
+            if (!(input == null || input == "" || input == " "))
+            {
+                input = input.ToLower();
+                List<string> selectedNames = birdNames.FindAll((str) => str.ToLower().Contains(input));
+                return selectedNames.OrderByDescending(name => GetPriorityScore(input, name.ToLower())).ToList();
+            }
             return new List<string>();
         }
-
+        private int GetPriorityScore(string input, string name)
+        {
+            if (name.StartsWith(input.ToLower()))
+            {
+                return 2;
+            }
+            foreach(var word in name.Split(' '))
+            {
+                if (word.StartsWith(input)) return 1;
+            }
+            return 0;
+        }
         private bool DoesInputExist(string input)
         {
             return birdNames.Contains(input);
