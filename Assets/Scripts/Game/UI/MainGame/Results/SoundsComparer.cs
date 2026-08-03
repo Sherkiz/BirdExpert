@@ -5,11 +5,11 @@ using UnityEngine.UI;
 namespace BirdExpert { 
     public class SoundsComparer : UIArea
     {
-        [SerializeField] SoundPlayer goodBirdSoundPlayer;
-        [SerializeField] SoundPlayer badBirdSoundPlayer;
-        [SerializeField] TextMeshProUGUI goodBirdText;
-        [SerializeField] TextMeshProUGUI badBirdText;
-        [SerializeField] Button closeButton;
+        [SerializeField] private SoundPlayer goodBirdSoundPlayer;
+        [SerializeField] private SoundPlayer badBirdSoundPlayer;
+        [SerializeField] private TextMeshProUGUI goodBirdText;
+        [SerializeField] private TextMeshProUGUI badBirdText;
+        [SerializeField] private Button closeButton;
 
         public override void Initialize(bool active)
         {
@@ -17,17 +17,24 @@ namespace BirdExpert {
             closeButton.onClick.AddListener(CloseArea);
             closeButton.SetCodeText("back-to-result");
         }
-        public void OpenArea(BirdInfo goodBird, BirdInfo badBird, SoundType soundType = SoundType.AllSounds)
+        public void OpenArea(BirdSound givenSound, BirdInfo goodBird, BirdInfo badBird)
         {
-            string soundText = string.Empty;
-            if (soundType == SoundType.Alarm) soundText = " (" + Language.GetLang("alarm") + ")";
-            else if (soundType == SoundType.Song) soundText = " (" + Language.GetLang("song") + ")";
-            goodBirdSoundPlayer.SetAudioClip(goodBird.GetRandomSound(type: soundType).sound);
-            badBirdSoundPlayer.SetAudioClip(badBird.GetRandomSound(type: soundType).sound);
-            goodBirdText.SetText(goodBird.GetName(GameManager.Instance.gameMode.lang) + soundText);
-            badBirdText.SetText(badBird.GetName(GameManager.Instance.gameMode.lang) + soundText);
+            goodBirdSoundPlayer.SetAudioClip(givenSound.sound);
+            goodBirdText.SetText(goodBird.GetName(GameManager.Instance.gameMode.lang) + GetSoundText(givenSound.type));
+            BirdSound badBirdSound = badBird.GetRandomSound(typePriority: givenSound.type, findAnyway: true);
+            badBirdSoundPlayer.SetAudioClip(badBirdSound.sound);
+            badBirdText.SetText(badBird.GetName(GameManager.Instance.gameMode.lang) + GetSoundText(badBirdSound.type));
             OpenArea();
         }
-        public void OpenArea(QuizzAnswer answer) => OpenArea(answer.expectedBird, answer.givenAnswer, answer.birdSound.type);
+        public void OpenArea(QuizzAnswer answer) => OpenArea(answer.birdSound, answer.expectedBird, answer.givenAnswer);
+        private string GetSoundText(SoundType soundType)
+        {
+            return soundType switch 
+            {
+                SoundType.Alarm => " (" + Language.GetLang("alarm") + ")",
+                SoundType.Song => " (" + Language.GetLang("song") + ")",
+                _ => ""
+            };
+        }
     }
 }

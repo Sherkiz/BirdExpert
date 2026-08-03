@@ -27,9 +27,9 @@ namespace BirdExpert {
             bgImage = GetComponent<Image>();
             ResetArea();
             compareBirdsButton.SetCodeText("compare-birds-button");
-            compareBirdsButton.onClick.AddListener(() => birdsComparer.OpenArea(answer));
+            compareBirdsButton.onClick.AddListener(OpenBirdComparer);
             compareSoundsButton.SetCodeText("compare-sounds-button");
-            compareSoundsButton.onClick.AddListener(() => soundsComparer.OpenArea(answer));
+            compareSoundsButton.onClick.AddListener(OpenSoundComparer);
             birdsComparer.Initialize(false);
             soundsComparer.Initialize(false); 
             onBackButtonPressed += ResetArea;
@@ -47,6 +47,16 @@ namespace BirdExpert {
             {
                 backButton.SetCodeText("results-nextbird-button");
             }
+        }
+        private void OpenSoundComparer()
+        {
+            soundsComparer.OpenArea(answer);
+            soundPlayer.Stop();
+        }
+        private void OpenBirdComparer()
+        {
+            birdsComparer.OpenArea(answer);
+            soundPlayer.Stop();
         }
         public void SetResults(QuizzAnswer answer)
         {
@@ -74,12 +84,14 @@ namespace BirdExpert {
         {
             resultText.SetCodeText("good-answer");
             compareBirdsButton.gameObject.SetActive(false);
+            compareSoundsButton.gameObject.SetActive(false);
         }
 
         private void SetUpBadResult(string input, string answer)
         {
             resultText.SetText(Language.GetLang("wrong-answer-beginning") + input + Language.GetLang("wrong-answer-end") + answer);
             compareBirdsButton.gameObject.SetActive(true);
+            compareSoundsButton.gameObject.SetActive(true);
         }
         public void ResetArea()
         {
